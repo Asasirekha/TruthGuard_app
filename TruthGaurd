@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthGuard - Your Digital Literacy Coach</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .input-section h2 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .result-card {
+            background: #f8fafc;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .result-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+
+        .result-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .red-flag {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .red-flag h4 {
+            color: #dc2626;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .flag-detail {
+            margin-bottom: 10px;
+        }
+
+        .flag-label {
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .action-plan {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .action-plan h3 {
+            color: #15803d;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .action-step {
+            background: white;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #22c55e;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #15803d;
+            margin-bottom: 5px;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .demo-examples {
+            margin-top: 30px;
+        }
+
+        .demo-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .demo-title {
+            font-weight: bold;
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+
+        .demo-text {
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🛡️ TruthGuard</div>
+            <div class="tagline">Your Digital Literacy Coach - Learn to Spot Misinformation</div>
+        </header>
+
+        <div class="main-card">
+            <div class="input-section">
+                <h2>🔍 Paste Suspicious Content Here</h2>
+                <textarea id="contentInput" placeholder="Paste any suspicious social media post, WhatsApp message, or news claim here. For example: 'SHOCKING: Scientists ADMIT that drinking lemon water every morning actually CAUSES bone cancer! Share this to save a life!'"></textarea>
+                <button class="analyze-btn" onclick="analyzeContent()">Analyze for Misinformation</button>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing content for misinformation patterns...</p>
+            </div>
+
+            <div class="results" id="results"></div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎓</div>
+                <div class="feature-title">Educational Approach</div>
+                <p>Learn WHY content is suspicious, don't just get a verdict</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚩</div>
+                <div class="feature-title">Pattern Recognition</div>
+                <p>Identify common red flags in misinformation</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✅</div>
+                <div class="feature-title">Action Plans</div>
+                <p>Get specific steps to verify claims yourself</p>
+            </div>
+        </div>
+
+        <div class="demo-examples">
+            <h2 style="color: white; text-align: center; margin-bottom: 20px;">📝 Try These Demo Examples</h2>
+            
+            <div class="demo-card" onclick="loadExample(1)">
+                <div class="demo-title">Health Misinformation Example</div>
+                <div class="demo-text">"SHOCKING: Scientists ADMIT that drinking lemon water every morning actually CAUSES bone cancer! Share this to save a life!"</div>
+            </div>
+
+            <div class="demo-card" onclick="loadExample(2)">
+                <div class="demo-title">Political Misinformation Example</div>
+                <div class="demo-text">"BREAKING: Government officials SECRETLY meeting to ban all social media by 2025! They don't want you to know this! Share before it's deleted!"</div>
+            </div>
+
+            <div class="demo-card" onclick="loadExample(3)">
+                <div class="demo-title">Financial Scam Example</div>
+                <div class="demo-text">"Urgent! Bank error means FREE MONEY for everyone! Just click this link and claim your $5000 before midnight! Limited time only!"</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const examples = {
+            1: "SHOCKING: Scientists ADMIT that drinking lemon water every morning actually CAUSES bone cancer! Share this to save a life!",
+            2: "BREAKING: Government officials SECRETLY meeting to ban all social media by 2025! They don't want you to know this! Share before it's deleted!",
+            3: "Urgent! Bank error means FREE MONEY for everyone! Just click this link and claim your $5000 before midnight! Limited time only!"
+        };
+
+        function loadExample(num) {
+            document.getElementById('contentInput').value = examples[num];
+        }
+
+        function analyzeContent() {
+            const content = document.getElementById('contentInput').value.trim();
+            if (!content) {
+                alert('Please paste some content to analyze first!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            // Simulate AI processing time
+            setTimeout(() => {
+                showAnalysis(content);
+            }, 2000);
+        }
+
+        function showAnalysis(content) {
+            document.getElementById('loading').style.display = 'none';
+            
+            const analysis = generateAnalysis(content);
+            document.getElementById('results').innerHTML = analysis;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function generateAnalysis(content) {
+            // This is a demonstration - in a real app, this would call your AI service
+            const lowerContent = content.toLowerCase();
+            
+            let redFlags = [];
+            let actionSteps = [];
+            let riskLevel = "Medium";
+            let conclusion = "";
+
+            // Detect common misinformation patterns
+            if (content.includes('SHOCKING') || content.includes('BREAKING') || /[A-Z]{4,}/.test(content)) {
+                redFlags.push({
+                    title: "Emotional & Alarmist Language",
+                    what: `Words like "${content.match(/[A-Z]{4,}/g)?.join('", "') || 'SHOCKING/BREAKING'}" in all caps, designed to trigger fear and urgency.`,
+                    why: "Credible information is usually presented calmly and factually, not like sensational headlines designed to grab attention."
+                });
+                riskLevel = "High";
+            }
+
+            if (lowerContent.includes('scientists') && !content.includes('University') && !content.includes('Study') && !content.includes('Journal')) {
+                redFlags.push({
+                    title: "Vague Authority Claims",
+                    what: `The claim mentions "scientists" but provides no specific names, institutions, or studies.`,
+                    why: "Real scientific breakthroughs are always backed by citable research from reputable organizations with specific details."
+                });
+            }
+
+            if (lowerContent.includes('share') || lowerContent.includes('forward') || lowerContent.includes('send this')) {
+                redFlags.push({
+                    title: "Viral Sharing Appeal",
+                    what: `The text explicitly encourages sharing or forwarding.`,
+                    why: "Misinformation often relies on going viral. Credible information spreads because it's useful and true, not because it begs to be shared."
+                });
+            }
+
+            if (lowerContent.includes('free money') || lowerContent.includes('click this link') || lowerContent.includes('limited time')) {
+                redFlags.push({
+                    title: "Scam Indicators",
+                    what: `Contains typical scam language like "free money," "click this link," or "limited time."`,
+                    why: "Legitimate financial opportunities don't come through unsolicited messages with urgent deadlines."
+                });
+                riskLevel = "Very High";
+            }
+
+            // Generate action steps based on content type
+            if (lowerContent.includes('health') || lowerContent.includes('cancer') || lowerContent.includes('lemon water')) {
+                actionSteps.push({
+                    title: "Check Medical Fact-Checkers",
+                    description: "Search for key terms on Snopes.com, Reuters Fact Check, or PolitiFact's health section."
+                });
+                actionSteps.push({
+                    title: "Consult Authoritative Health Sources",
+                    description: "Visit the American Cancer Society, World Health Organization (WHO), or CDC websites to verify health claims."
+                });
+            } else if (lowerContent.includes('government') || lowerContent.includes('political')) {
+                actionSteps.push({
+                    title: "Check Official Government Sources",
+                    description: "Look for official announcements on government websites or verified social media accounts."
+                });
+                actionSteps.push({
+                    title: "Cross-Reference News Sources",
+                    description: "Check if reputable news organizations (Reuters, AP News, BBC) are reporting the same information."
+                });
+            } else if (lowerContent.includes('money') || lowerContent.includes('bank') || lowerContent.includes('click')) {
+                actionSteps.push({
+                    title: "Never Click Suspicious Links",
+                    description: "Legitimate financial institutions don't distribute money through random messages."
+                });
+                actionSteps.push({
+                    title: "Verify with Official Channels",
+                    description: "If this claims to be from a bank, call the bank directly using their official phone number."
+                });
+            }
+
+            // Default action steps
+            if (actionSteps.length === 0) {
+                actionSteps.push({
+                    title: "Search Fact-Checking Websites",
+                    description: "Look up key claims on Snopes, Reuters Fact Check, or similar reputable fact-checking sites."
+                });
+            }
+
+            actionSteps.push({
+                title: "Check Source Credibility",
+                description: "Ask: Who originally shared this? Do they have expertise in this area? Are they known for reliable information?"
+            });
+
+            // Generate conclusion
+            if (riskLevel === "Very High") {
+                conclusion = "This content shows multiple strong indicators of misinformation or scam content. Exercise extreme caution and avoid sharing.";
+            } else if (riskLevel === "High") {
+                conclusion = "This content shows clear signs of misinformation tactics. Verify through official sources before believing or sharing.";
+            } else {
+                conclusion = "This content shows some concerning patterns. Apply critical thinking and verify claims before sharing.";
+            }
+
+            return `
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="result-icon">🔍</span>
+                        <span class="result-title">Summary of Claim</span>
+                    </div>
+                    <p>"${content.substring(0, 200)}${content.length > 200 ? '...' : ''}"</p>
+                </div>
+
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="result-icon">🚩</span>
+                        <span class="result-title">Red Flags Identified (Risk Level: ${riskLevel})</span>
+                    </div>
+                    ${redFlags.map(flag => `
+                        <div class="red-flag">
+                            <h4>${flag.title}</h4>
+                            <div class="flag-detail">
+                                <span class="flag-label">What we see:</span> ${flag.what}
+                            </div>
+                            <div class="flag-detail">
+                                <span class="flag-label">Why it's a red flag:</span> ${flag.why}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="action-plan">
+                    <h3>✅ Your Fact-Checking Action Plan</h3>
+                    <p style="margin-bottom: 15px; color: #374151;">Don't just take our word for it. Here's how you can investigate this yourself:</p>
+                    ${actionSteps.map((step, index) => `
+                        <div class="action-step">
+                            <div class="step-title">${index + 1}. ${step.title}</div>
+                            <div>${step.description}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="conclusion">
+                    <strong>Conclusion:</strong> ${conclusion}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
