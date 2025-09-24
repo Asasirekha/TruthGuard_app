@@ -1,0 +1,23 @@
+# .gitignore
+
+# API Keys and Secrets - MOST IMPORTANT!
+.env
+.streamlit/secrets.toml
+secrets.toml
+*.key
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
