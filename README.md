@@ -1,6 +1,6 @@
 # TruthGuard Agent - Autonomous AI Fact-Checker
 
-An advanced AI agent that autonomously fact-checks claims by searching the web, analyzing evidence, and providing verdicts.
+An advanced AI agit add .gitignoregent that autonomously fact-checks claims by searching the web, analyzing evidence, and providing verdicts.
 
 ## Features
 
